@@ -422,8 +422,10 @@ namespace Metroist.Pages
             if (listBox.SelectedItem != null)
             {
                 var selected = listBox.SelectedItem as MetroistLib.Model.QueryDataItem;
+                Project project = app.projects.First(x=>x.id == selected.project_id);
 
-                NavigationService.Navigate(Utils.TaskDetailPage(selected));
+                if(project != null)
+                    NavigationService.Navigate(Utils.TaskDetailPage(project, selected));
 
                 listBox.SelectedItem = null;
             }

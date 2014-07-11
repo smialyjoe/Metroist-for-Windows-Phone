@@ -127,9 +127,10 @@ namespace Metroist
             return new Uri("/Pages/AboutPage.xaml", UriKind.Relative);
         }
 
-        internal static Uri TaskDetailPage(QueryDataItem item)
+        internal static Uri TaskDetailPage(Project project, QueryDataItem task)
         {
-            TaskDetail.taskSelected = item;
+            TaskDetail.Project = project;
+            TaskDetail.Task = task;
             return new Uri("/Pages/TaskDetail.xaml", UriKind.Relative);
         }
 
@@ -184,6 +185,8 @@ namespace Metroist
         {
             return new Uri("/Pages/DateTimeChooserPage.xaml", UriKind.Relative);
         }
+
+
 
         internal static string Message(string errorMsg)
         {
@@ -331,13 +334,18 @@ namespace Metroist
             return result;
         }
 
-
-
         internal static Uri WebPage(String urlToGo, Action successCallback)
         {
             Pages.WebPage.urlToGo = urlToGo;
             Pages.WebPage.successCallback = successCallback;
             return new Uri("/Pages/WebPage.xaml", UriKind.Relative);
+        }
+
+        internal static Uri AddNotePage(Project project, QueryDataItem taskSelected)
+        {
+            Pages.AddNotePage.Project = project;
+            Pages.AddNotePage.Task = taskSelected;
+            return new Uri("/Pages/AddNotePage.xaml", UriKind.Relative);
         }
     }
 }

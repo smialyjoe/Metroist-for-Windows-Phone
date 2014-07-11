@@ -57,7 +57,7 @@ namespace Metroist
             {
                 if (UncompletedTasksListBox.SelectedItem != null)
                 {
-                    NavigationService.Navigate(Utils.TaskDetailPage(UncompletedTasksListBox.SelectedItem as QueryDataItem));
+                    NavigationService.Navigate(Utils.TaskDetailPage(projectSelected, UncompletedTasksListBox.SelectedItem as QueryDataItem));
                     UncompletedTasksListBox.SelectedItem = null;
                 }
             };
@@ -97,7 +97,8 @@ namespace Metroist
                 var cmdTimeGenerated = DateTime.Now;
                 var tempID = Utils.DateTimeToUnixTimestamp(cmdTimeGenerated).ToString();
 
-                if (projectSelected.last_updated == 0.0)
+                //if (projectSelected.last_updated == 0.0)
+                if (projectSelected.id == null)
                 {
                     //@TODO: Check if there is a unsynchroned project with the same name.
                     //There isn't another way to check if the project wasn't sync instead of checking by name

@@ -19,14 +19,19 @@ namespace Metroist
 {
     public partial class TaskDetail : PhoneApplicationPage
     {
-        public static MetroistLib.Model.QueryDataItem taskSelected = null;
+        public static MetroistLib.Model.QueryDataItem Task = null;
+        public static Project Project;
         public App app = Application.Current as App;
 
         private bool taskDeleted = false;
 
-        ApplicationBarIconButton deleteIconButton = GeneralLib.Utils.createTrashButton("delete");
+        private ApplicationBarIconButton addNoteIconButton = GeneralLib.Utils.createAddButton("add note");
+        private ApplicationBarIconButton deleteIconButton = GeneralLib.Utils.createTrashButton("delete");
+        private ApplicationBarIconButton checkUncheckButton;
 
         ProgressIndicator progress = new ProgressIndicator { IsVisible = false, IsIndeterminate = true };
+
+        public static bool needsUpdateView = false;
 
         public TaskDetail()
         {
@@ -36,11 +41,9 @@ namespace Metroist
 
             SystemTray.SetProgressIndicator(this, progress);
 
-            taskSelected.notes = taskSelected.notes.OrderByDescending(e => DateTime.Parse(e.posted)).ToList();
+            UpdateView();
 
-            extractUrl(taskSelected.notes);
-
-            DataContext = taskSelected;
+            SwitchButtonsFromAppBar();
         }
 
         private void extractUrl(List<Note> list)
@@ -80,25 +83,10 @@ namespace Metroist
                 return string.Empty;
         }
 
-        private void ManageApplicationBar(object sender)
-        {
-            Pivot pivot = sender as Pivot;
-            PivotItem pivotItem = pivot.SelectedItem as PivotItem;
-
-            if (pivotItem.Name == "DetailsPivotItem")
-            {
-                ApplicationBar.IsVisible = true;
-            }
-            else if (pivotItem.Name == "NotesPivotItem")
-            {
-                ApplicationBar.IsVisible = false;
-            }
-        }
-
         private void CreateApplicationBar()
         {
             var project = (from proj in app.projects
-                            where proj.id == taskSelected.project_id
+                            where proj.id == Task.project_id
                             select proj).FirstOrDefault();
 
             if (project != null)
@@ -111,36 +99,53 @@ namespace Metroist
                 else
                     ApplicationBar = Utils.CreateApplicationBar(BackgroundColor); 
             }
-
-            var checkUncheckButton =
-                taskSelected.is_checked ? 
-                GeneralLib.Utils.createUncheckButton("uncheck") : 
-                GeneralLib.Utils.createCheckButton("check");
-
-            checkUncheckButton.Click += new EventHandler(checkUncheckButton_Click);
+            
             deleteIconButton.Click += new EventHandler(deleteIconButton_Click);
-
-            ApplicationBar.Buttons.Add(checkUncheckButton);
-            ApplicationBar.Buttons.Add(deleteIconButton);
+            addNoteIconButton.Click += new EventHandler(addNoteIconButton_Click);
 
             ApplicationBar.IsVisible = true;
         }
 
+        void addNoteIconButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(Utils.AddNotePage(Project, Task));
+        }
+
+        private void SwitchButtonsFromAppBar()
+        {
+            if (tasksPivot.SelectedItem == DetailsPivotItem)
+            {
+                checkUncheckButton =
+                    Task.is_checked ?
+                        GeneralLib.Utils.createUncheckButton("uncheck") :
+                        GeneralLib.Utils.createCheckButton("check");
+
+                checkUncheckButton.Click += new EventHandler(checkUncheckButton_Click);
+
+                ApplicationBar.Buttons.Add(checkUncheckButton);
+                ApplicationBar.Buttons.Add(deleteIconButton);
+            }
+            else if (tasksPivot.SelectedItem == NotesPivotItem)
+            {
+                ApplicationBar.Buttons.Add(addNoteIconButton);
+            }
+        }
+
         void deleteIconButton_Click(object sender, EventArgs e)
         {
-            if(taskSelected!=null)
+            if(Task!=null)
             {
-                var result = MessageBox.Show(String.Format("Delete task \"{0}\"?", taskSelected.content), "Metroist", MessageBoxButton.OKCancel);
+                var result = MessageBox.Show(String.Format("Delete task \"{0}\"?", Task.content), "Metroist", MessageBoxButton.OKCancel);
 
                 if (result == MessageBoxResult.OK)
                 {
                     var project = (from proj in app.projects
-                                   where proj.id == taskSelected.project_id
+                                   where proj.id == Task.project_id
                                    select proj).FirstOrDefault();
 
                     if (project != null)
                     {
-                        var task = project.items.Where(x => x.id == taskSelected.id).FirstOrDefault();
+                        var task = project.items.Where(x => x.id == Task.id).FirstOrDefault();
 
                         if (task != null)
                         {
@@ -167,7 +172,7 @@ namespace Metroist
 
             deleteIconButton.IsEnabled = false;
 
-            app.service.RemoveTask(commandTimeGenerated, taskSelected,
+            app.service.RemoveTask(commandTimeGenerated, Task,
             (data) =>
             {
                 project.items.RemoveAt(indexOf);
@@ -195,13 +200,13 @@ namespace Metroist
         {
             var cmdTime = DateTime.Now;
 
-            QueryDataItem selected = taskSelected as QueryDataItem;
+            QueryDataItem selected = Task as QueryDataItem;
 
             //selected.selectedListBoxItem_ProjectDetail = true;
             if (selected != null)
             {   
                 var project = (from proj in app.projects
-                                   where proj.id == taskSelected.project_id
+                                   where proj.id == Task.project_id
                                    select proj).FirstOrDefault();
 
                 if (project != null)
@@ -219,7 +224,7 @@ namespace Metroist
                 newButton.Text = selected.is_checked ? "uncheck" : "check done";
 
                 DataContext = null;
-                DataContext = taskSelected;
+                DataContext = Task;
                 //-->
 
                 app.service.SetTaskAsChecked(cmdTime, selected,
@@ -239,6 +244,24 @@ namespace Metroist
                 });
             }
 
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            if (needsUpdateView)
+            {
+                UpdateView();
+            }
+        }
+
+        private void UpdateView()
+        {
+            Task.notes = Task.notes.OrderByDescending(e => DateTime.Parse(e.posted)).ToList();
+            extractUrl(Task.notes);
+            DataContext = null;
+            DataContext = Task;
         }
 
         protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
@@ -269,7 +292,8 @@ namespace Metroist
 
         private void tasksPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ManageApplicationBar(sender);
+            ApplicationBar.Buttons.Clear();
+            SwitchButtonsFromAppBar();
         }
     }
 }

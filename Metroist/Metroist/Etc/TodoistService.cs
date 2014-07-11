@@ -575,6 +575,59 @@ namespace Metroist
 
         #endregion
 
+        #region note
+
+        public void AddNoteToTask(DateTime commandTimeGenerated, int idOfTask, String content, Action<Data> onSuccess, Action<string> onError, Action onFinally)
+        {
+            App app = Application.Current as App;
+
+            //Main argument list
+            Dictionary<string, object> Arguments = new Dictionary<string, object>
+            {
+                {"api_token", app.loginInfo.api_token},
+                //{"project_timestamps", Utils.EncodeJsonProperties(app.projects)},
+            };
+
+            //Items to sync argument list
+            Dictionary<string, object> itemsToSyncArgs = new Dictionary<string, object>
+            {
+                {"type", "note_add"},
+                {"temp_id", Utils.DateTimeToUnixTimestamp(commandTimeGenerated)},
+                {"timestamp", Utils.DateTimeToUnixTimestamp(commandTimeGenerated)},
+            };
+
+            //Internal 'args' argument list
+            Dictionary<string, object> internalArgs = new Dictionary<string, object>
+            {
+                {"item_id", idOfTask },
+                {"content", content },
+            };
+
+            //Adding item_to_sync and args to their respective argument dictonaries.
+            itemsToSyncArgs.Add("args", internalArgs);
+            Arguments.Add("items_to_sync", "[" + Utils.EncodeJsonItems(itemsToSyncArgs) + "]");
+
+            //onError("Sync testing! Please, if this message is being viewed, contact us!");
+            //return;
+
+            post<Data>(urlbaseSyncV2 + "syncAndGetUpdated", Arguments,
+            (response) =>
+            {
+                onSuccess(response);
+                if (onFinally != null)
+                    onFinally();
+            },
+            (stringError) =>
+            {
+                onError(stringError);
+                //app.TemporaryDesynchronized.Add(itemsToSyncArgs);
+                if (onFinally != null)
+                    onFinally();
+            });
+        }
+
+        #endregion
+
         #region timezone
 
         public void GetTimezoneList(Action<List<List<string>>> onSuccess, Action<string> onError, Action onFinally = null)

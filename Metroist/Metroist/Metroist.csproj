@@ -95,6 +95,9 @@
     <Compile Include="Pages\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\AddNotePage.xaml.cs">
+      <DependentUpon>AddNotePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\AddProject.xaml.cs">
       <DependentUpon>AddProject.xaml</DependentUpon>
     </Compile>
@@ -147,6 +150,10 @@
     <Page Include="Pages\AboutPage.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\AddNotePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\AddProject.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
