@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="MetroistLib.Component.Header"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    
+    <Grid
+        d:LayoutOverrides="Width">
+        <Image
+            Source="/Todoist;component/Image/todoist_logo.png"
+            Margin="-9,0,0,0"
+            Width="96"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Stretch="UniformToFill"
+            Height="72"/>
+        <TextBlock
+            x:Name="ApplicationTitle"
+            Text="{Binding Title}"
+            Style="{StaticResource PhoneTextNormalStyle}"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Right"/>
+    </Grid>
+</UserControl>

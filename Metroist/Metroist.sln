@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010 Express for Windows Phone
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metroist", "Metroist\Metroist.csproj", "{21F3F419-06C3-43DC-9555-8E5D2E92B4BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroistLib", "MetroistLib\MetroistLib.csproj", "{0B8E56D5-82DC-4F54-B511-092BFABF2CB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneralLib", "..\GeneralLib\GeneralLib.csproj", "{C10E8985-3F17-418C-A611-A88C606F9B28}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21F3F419-06C3-43DC-9555-8E5D2E92B4BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21F3F419-06C3-43DC-9555-8E5D2E92B4BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21F3F419-06C3-43DC-9555-8E5D2E92B4BA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{21F3F419-06C3-43DC-9555-8E5D2E92B4BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21F3F419-06C3-43DC-9555-8E5D2E92B4BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21F3F419-06C3-43DC-9555-8E5D2E92B4BA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0B8E56D5-82DC-4F54-B511-092BFABF2CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B8E56D5-82DC-4F54-B511-092BFABF2CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B8E56D5-82DC-4F54-B511-092BFABF2CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B8E56D5-82DC-4F54-B511-092BFABF2CB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C10E8985-3F17-418C-A611-A88C606F9B28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C10E8985-3F17-418C-A611-A88C606F9B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C10E8985-3F17-418C-A611-A88C606F9B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C10E8985-3F17-418C-A611-A88C606F9B28}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
